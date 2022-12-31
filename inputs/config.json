@@ -1,0 +1,7 @@
+{
+    "files": {
+        "accounts": "inputs/accounts.txt",
+        "cookies": "inputs/cookies/"
+    },
+    "input_format": "csv"
+}
