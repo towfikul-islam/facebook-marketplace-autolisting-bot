@@ -10,7 +10,7 @@ if len(files) > 1:
     print(f"More than one {resources['files']['input_format']} file found in the directory")
     
     for idx, file in enumerate(files):
-        print(f"\n IDX: {idx+1} ----- NAME: {file} \n")
+        print(f"\n IDX: {idx+1} \t NAME: {file} \n")
     index = input("specify the file idx:\t")
     index = int(index.strip())
 elif len(files) == 0:
@@ -20,14 +20,8 @@ else:
 
 ITEM_FILE = files[index]
 
-    
-# ITEMS = Path("listings.csv").read_text()
-# print(ITEMS)
-print()
-
 
 ACCOUNTS = []
-
 for line in lines:
     account = line.split(':')
     cookie_file = resources['files']['cookies'] + account[0] + ".json"

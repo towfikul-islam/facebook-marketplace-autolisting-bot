@@ -14,6 +14,10 @@ class Marketplace():
         self.page = self.context.new_page()
         if viewport:
             self.page.set_viewport_size(viewport)
+        self.wait_time = {
+            "min": 1000,
+            "max": 3000
+        }
 
 
     def is_captcha(self):
@@ -32,6 +36,7 @@ class Marketplace():
             return False
         else:
             return True
+
 
     def login(self, username=None, password=None, cookies=None):
         
@@ -119,23 +124,6 @@ class Marketplace():
         if name and not cooldown or username:
             # self.page.wait_for_timeout(random.randint(3000, 5000))
             self.page.locator("css=[data-e2e='set-username-popup-confirm']").click()
-
-        self.page.wait_for_timeout(5000)
-
-
-    def upload(self, video):
-        # Upload
-        self.page.wait_for_timeout(random.randint(3000, 5000))
-        self.page.locator("css=[data-e2e='upload-icon']").click()
-
-        # Select file
-        frame = self.page.frame_locator("css=iframe").first
-        self.page.wait_for_timeout(random.randint(3000, 5000))
-        frame.locator("css=[type='file']").set_input_files(video)
-
-        # Post
-        self.page.wait_for_timeout(30000)
-        frame.locator("css=[class='jsx-2580397738 btn-post']").click()
 
         self.page.wait_for_timeout(5000)
 
