@@ -1,7 +1,8 @@
 {
     "files": {
         "accounts": "inputs/accounts.txt",
-        "cookies": "inputs/cookies/"
+        "cookies": "inputs/cookies/",
+        "products": "products/" 
     },
     "input_format": "xlsx"
 }
