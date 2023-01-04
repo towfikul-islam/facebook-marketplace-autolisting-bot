@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 import random
 import os
+import pathlib
 
 def upload(images, page):
 	if not images:
@@ -12,10 +13,10 @@ def upload(images, page):
 
 	page.wait_for_timeout(10000)
 
-def generate_multiple_images_path(path, images):
+def generate_multiple_images_path(images):
 	# Last character must be '/' because after that we are adding the name of the image
-	if path[-1] != '\\':
-		path += '\\'
+	# if path[-1] != '\\':
+	# 	path += '\\'
 
 	images_path = ''
 
@@ -24,6 +25,7 @@ def generate_multiple_images_path(path, images):
 
 	# Create string that contains all of the image paths separeted by \n
 	if image_names:
+		# images_path = ('\n').join([os.path.join(path, item.strip()) for item in image_names])
 		for image_name in image_names:
 			# Remove whitespace before and after the string
 			image_name = image_name.strip()
@@ -32,7 +34,7 @@ def generate_multiple_images_path(path, images):
 			if images_path != '':
 				images_path += '\n'
 
-			images_path += path + image_name
+			images_path += os.getcwd().replace("\\", "/") + "/photos/" + image_name
 
 	return images_path
 
@@ -60,7 +62,7 @@ def publish_listing(data, listing_type, page):
 	page.wait_for_load_state('networkidle')
 
 	# Create string that contains all of the image paths separeted by \n
-	images_path = generate_multiple_images_path('photos', data['photos'])
+	images_path = generate_multiple_images_path(data['photos'])
 	# Add images to the the listing
 	upload(images_path, page)
 	page.wait_for_timeout(random.randint(1000, 3000))
@@ -93,6 +95,9 @@ def publish_listing(data, listing_type, page):
 	# Publish the listing
 	page.click('div[aria-label="Publish"]')
 
+    # wait for network to finish loading
+	page.wait_for_load_state('networkidle')
+
 
 	# # Add listing to multiple groups
 	# # add_listing_to_multiple_groups(data, scraper)
@@ -119,14 +124,21 @@ def add_fields_for_items(data, page):
 
 	# Scroll to "Category" value
 	page.wait_for_timeout(random.randint(1000, 3000))
-	for cat in data['category'].split(';'):
-		cat_selector = selector_exists(page, f'div[role="button"]:has-text("{cat.strip()}")')
-		if cat_selector:
-			page.click(f'div[role="button"]:has-text("{cat.strip()}")')
-		else:
-			page.click(f'div[role="radio"]:has-text("{cat.strip()}")')
+	categories = data['category'].split(';')
 
-		page.wait_for_timeout(random.randint(1000, 3000))
+	for cat in categories:
+		try:
+			cat_selector = selector_exists(page, f'div[role="button"]:has-text("{cat.strip()}")')
+			if cat_selector:
+				cat_selector.click()
+			else:
+				page.click(f'div[role="radio"]:has-text("{cat.strip()}")')
+
+			page.wait_for_timeout(random.randint(2000, 4000))
+		except:
+			page.fill('input[aria-label="Category"]', '')
+			page.fill('input[aria-label="Category"]', categories[-1].strip())
+	
 	
 	# Scroll and select to "Condition"
 	page.wait_for_timeout(random.randint(1000, 3000))

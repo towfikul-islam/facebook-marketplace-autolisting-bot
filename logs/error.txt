@@ -1,0 +1,83 @@
+[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'photos\\1.png\nphotos\\2.png'Navigation failed because page was closed!
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'photos\\1.png\nphotos\\2.png'Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "css=div[aria-label="Click to submit current value"]"
+  selector resolved to visible <div tabindex="0" role="button" aria-label="Click to …>…</div>
+attempting click action
+  waiting for element to be visible, enabled and stable
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "css=span:has-text("Item for Sale") >> nth=1"
+  selector resolved to visible <span dir="auto" class="x193iq5w xeuugli x13faqbe x1vv…>…</span>
+attempting click action
+  waiting for element to be visible, enabled and stable
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'photos\\1.png \n photos\\2.png'Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'photos\\1.png \n photos\\2.png'Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "css=span:has-text("Item for Sale") >> nth=1"
+  selector resolved to visible <span dir="auto" class="x193iq5w xeuugli x13faqbe x1vv…>…</span>
+attempting click action
+  waiting for element to be visible, enabled and stable
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'photos\\D:\\fb\\marketplace-bot\\1.png \n photos\\2.png'Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:\\fb\\marketplace-bot\\photos\\1.png \n D:\\fb\\marketplace-bot\\photos\\2.png'[WinError 3] The system cannot find the path specified: 'D:\\fb\\marketplace-bot\\photos\\1\nD:\\fb\\marketplace-bot\\photos\\.\nD:\\fb\\marketplace-bot\\photos\\p\nD:\\fb\\marketplace-bot\\photos\\n\nD:\\fb\\marketplace-bot\\photos\\g\nD:\\fb\\marketplace-bot\\photos\\;\nD:\\fb\\marketplace-bot\\photos\\\nD:\\fb\\marketplace-bot\\photos\\2\nD:\\fb\\marketplace-bot\\photos\\.\nD:\\fb\\marketplace-bot\\photos\\p\nD:\\fb\\marketplace-bot\\photos\\n\nD:\\fb\\marketplace-bot\\photos\\g'Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================Target closed
+=========================== logs ===========================
+waiting for selector "css=svg[aria-label='Your profile']"
+============================================================Target closed
+=========================== logs ===========================
+waiting for selector "css=svg[aria-label='Your profile']"
+============================================================[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:\\fb\\marketplace-bot\\photos\\1.png\nD:\\fb\\marketplace-bot\\photos\\2.png'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:\\fb\\marketplace-bot\\photos\\1.png \n D:\\fb\\marketplace-bot\\photos\\2.png'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:\\fb\\marketplace-bot\\photos\\1.png\nD:\\fb\\marketplace-bot\\photos\\2.png'generate_multiple_images_path() takes 1 positional argument but 2 were given[WinError 123] The filename, directory name, or volume label syntax is incorrect: '1.png\n2.png'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'photos/1.png\nphotos/2.png'unsupported operand type(s) for +: 'WindowsPath' and 'str'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:\\fb\\marketplace-bot/photos/1.png\nD:\\fb\\marketplace-bot/photos/2.png'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:/fb/marketplace-bot/photos/1.png\nD:/fb/marketplace-bot/photos/2.png'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:/fb/marketplace-bot/photos/1.png\nD:/fb/marketplace-bot/photos/2.png'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:/fb/marketplace-bot/photos/ 2.png\n'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:/fb/marketplace-bot/photos/1.png\nD:/fb/marketplace-bot/photos/2.png\n'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:/fb/marketplace-bot/photos/1.png\nD:/fb/marketplace-bot/photos/2.png\n'<unknown error>
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================<unknown error>
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:/fb/marketplace-bot/photos/1.png\n'<unknown error>
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================<unknown error>
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================local variable 'image_name' referenced before assignmentNavigation failed because page was closed!
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "div[aria-label="Publish"]"
+  selector resolved to visible <div role="button" tabindex="-1" aria-disabled="true"…>…</div>
+attempting click action
+  waiting for element to be visible, enabled and stable
+    element is not enabled - waiting...
+============================================================[WinError 2] The system cannot find the file specified: 'D:/fb/marketplace-bot/photos/1.png, 2.png'[WinError 123] The filename, directory name, or volume label syntax is incorrect: 'D:/fb/marketplace-bot/photos/1.png\nD:/fb/marketplace-bot/photos/2.png'Target closed
+=========================== logs ===========================
+waiting for selector "label[aria-label="Description"] textarea"
+============================================================Navigation failed because page was closed!
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================
