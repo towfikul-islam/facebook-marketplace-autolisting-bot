@@ -4,6 +4,7 @@ from helpers.marketplace import Marketplace
 from helpers.listing_helper import update_listings, generate_multiple_images_path
 from helpers.file_helper import read_file, write_file
 import os
+from datetime import datetime
 
 # # images_path = ""
 
@@ -32,7 +33,7 @@ for account in ACCOUNTS:
         print(e)
         print(f"\n\n PROXY: {account['proxy']} \n ACCOUNT: {account['login']['id']} \n PASSWORD: {account['login']['password']} \n")
         with open("logs/error.txt", "a") as f:
-            f.write(str(e))
+            f.write(f'{str(e)} \n\n occured: {datetime.now()}')
         continue
     else:
         print('Successfully connected')

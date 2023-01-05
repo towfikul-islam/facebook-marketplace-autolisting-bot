@@ -87,10 +87,12 @@ def publish_listing(data, listing_type, page):
 	page.wait_for_timeout(random.randint(1000, 3000))
 	page.fill('label[aria-label="Location"] input', '')
 	page.type('label[aria-label="Location"] input', str(data['location']), delay=200)
-	page.click('ul[role="listbox"] li:first-child > div', delay=3000)
+	page.wait_for_load_state('networkidle')
+	page.click('ul[role="listbox"] li:first-child > div')
 
 	# Go to the next step
-	page.click('div[aria-label="Next"]', delay=1000)
+	page.click('div[aria-label="Next"]')
+	page.wait_for_timeout(random.randint(1000, 3000))
 
 	# Publish the listing
 	page.click('div[aria-label="Publish"]')
@@ -129,10 +131,11 @@ def add_fields_for_items(data, page):
 	for cat in categories:
 		try:
 			cat_selector = selector_exists(page, f'div[role="button"]:has-text("{cat.strip()}")')
-			if cat_selector:
-				cat_selector.click()
-			else:
-				page.click(f'div[role="radio"]:has-text("{cat.strip()}")')
+			
+			if cat_selector: 
+				cat_selector.click() 
+			else: 
+				page.click(f'div[role="radio"]:has-text("{cat.strip()}")') 
 
 			page.wait_for_timeout(random.randint(2000, 4000))
 		except:
@@ -143,6 +146,7 @@ def add_fields_for_items(data, page):
 	# Scroll and select to "Condition"
 	page.wait_for_timeout(random.randint(1000, 3000))
 	page.click('label[aria-label="Condition"]')
+	page.wait_for_timeout(random.randint(1000, 3000))
 	page.click(f'div[role="option"]:has-text("{data["condition"].strip()}")')
 
 
