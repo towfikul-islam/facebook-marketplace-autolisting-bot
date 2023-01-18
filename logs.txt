@@ -1,0 +1,4 @@
+2023-01-19 02:39:57.540 | ERROR    | __main__:<module>:40 - Target closed
+=========================== logs ===========================
+waiting for selector "div[role="radio"] span:text-is("Home & Kitchen")"
+============================================================

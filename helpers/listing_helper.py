@@ -34,7 +34,7 @@ def generate_multiple_images_path(images):
 			if images_path != '':
 				images_path += '\n'
 
-			images_path += os.getcwd().replace("\\", "/") + "/photos/" + image_name
+			images_path += os.getcwd().replace("\\", "/") + "/inputs/photos/" + image_name
 
 	return images_path
 
@@ -82,11 +82,11 @@ def publish_listing(data, listing_type, page):
 	page.click('div[aria-label="Next"]')
 	page.wait_for_timeout(random.randint(1000, 3000))
 
-	# Publish the listing
-	page.click('div[aria-label="Publish"]')
+	# # Publish the listing
+	# page.click('div[aria-label="Publish"]')
 
-    # wait for network to finish loading
-	page.wait_for_load_state('networkidle')
+    # # wait for network to finish loading
+	# page.wait_for_load_state('networkidle')
 
 
 	# # Add listing to multiple groups

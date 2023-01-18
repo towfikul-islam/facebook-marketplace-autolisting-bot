@@ -42,11 +42,11 @@ class Marketplace():
 
             # Username
             self.page.wait_for_timeout(random.randint(3000, 5000))
-            self.page.locator("css=input[id='email']").type(username, delay=200)
+            self.page.locator("css=input[id='email']").type(username)
 
             # Password
             self.page.wait_for_timeout(random.randint(3000, 5000))
-            self.page.locator("css=input[id='pass']").type(password, delay=200)
+            self.page.locator("css=input[id='pass']").type(password)
             
             # Login
             self.page.wait_for_timeout(random.randint(3000, 5000))
