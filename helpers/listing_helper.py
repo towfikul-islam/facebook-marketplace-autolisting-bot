@@ -38,28 +38,9 @@ def generate_multiple_images_path(images):
 
 	return images_path
 
-# Remove and then publish each listing
-def update_listings(listings, type, page):
-	# Check if listing is already listed and remove it then publish it like a new one
-	for listing in listings:
-		# Remove listing if it is already published
-		# remove_listing(listing, type, scraper)
-
-		# Publish the listing in marketplace
-		publish_listing(listing, type, page)
-
 def publish_listing(data, listing_type, page):
 	# go to listing page
-	page.goto('https://www.facebook.com/marketplace/?ref=app_tab', wait_until='networkidle')
-
-	# click on new listing 
-	page.locator('css=a[aria-label="Create new listing"]').click()
-	page.wait_for_load_state('networkidle')
-
-	# click on new listing item
-	page.wait_for_timeout(random.randint(1000, 3000))
-	page.locator('css=span:has-text("Item for Sale") >> nth=1').click()
-	page.wait_for_load_state('networkidle')
+	page.goto('https://www.facebook.com/marketplace/create/item', wait_until='networkidle')
 
 	# Create string that contains all of the image paths separeted by \n
 	images_path = generate_multiple_images_path(data['photos'])
@@ -67,27 +48,34 @@ def publish_listing(data, listing_type, page):
 	upload(images_path, page)
 	page.wait_for_timeout(random.randint(1000, 3000))
 	
-
 	# Add specific fields based on the listing_type
 	function_name = 'add_fields_for_' + listing_type
 	# Call function by name dynamically
 	globals()[function_name](data, page)
 	
 	page.wait_for_timeout(random.randint(1000, 3000))
-	page.type('label[aria-label="Price"] input', str(data['price']), delay=200)
+	page.type('label[aria-label="Price"] input', str(data['price']))
+
+	# sometimes category selection gets error, we need to check if category	is selected
+	# if not selected, then description box will not be visible
+	if selector_exists(page, 'label[aria-label="Description"] textarea') is False:
+		select_category(selector='label[aria-label="Category"]', data=data, page=page)	
+
 	page.wait_for_timeout(random.randint(1000, 3000))
-	page.type('label[aria-label="Description"] textarea', data['description'], delay=200)
+	page.type('label[aria-label="Description"] textarea', data['description'])
 
 	#tags
-	page.wait_for_timeout(random.randint(1000, 3000))
-	for tag in data['tags'].split(';'):
-		page.type('css=label[aria-label="Product tags"] textarea', tag, delay=200)
-		page.click('css=div[aria-label="Click to submit current value"]')
+	if data['tags']:
+		page.wait_for_timeout(random.randint(1000, 3000))
+		for tag in data['tags'].split(';'):
+			page.type('css=label[aria-label="Product tags"] textarea', tag)
+			page.click('css=div[aria-label="Click to submit current value"]')
 
 	page.wait_for_timeout(random.randint(1000, 3000))
 	page.fill('label[aria-label="Location"] input', '')
-	page.type('label[aria-label="Location"] input', str(data['location']), delay=200)
+	page.type('label[aria-label="Location"] input', str(data['location']))
 	page.wait_for_load_state('networkidle')
+	page.wait_for_timeout(random.randint(3000, 5000))
 	page.click('ul[role="listbox"] li:first-child > div')
 
 	# Go to the next step
@@ -104,23 +92,8 @@ def publish_listing(data, listing_type, page):
 	# # Add listing to multiple groups
 	# # add_listing_to_multiple_groups(data, scraper)
 
-
-def selector_exists(page, selector, timeout=500):
-    try:
-        sel = page.wait_for_selector(selector, timeout=timeout, state='attached')
-        return sel
-    except PlaywrightTimeoutError:
-        return False
-
-
-def add_fields_for_items(data, page):
-	# Title
-	page.wait_for_timeout(random.randint(1000, 3000))
-	page.type('label[aria-label="Title"] input', str(data['title']), delay=200)
-	
-	# Scroll to "Category" select field
-	page.wait_for_timeout(random.randint(1000, 3000))
-	category_label = page.locator('label[aria-label="Category"]')
+def select_category(selector, data, page):
+	category_label = page.locator(selector)
 	category_label.scroll_into_view_if_needed()
 	category_label.click()
 
@@ -130,17 +103,29 @@ def add_fields_for_items(data, page):
 
 	for cat in categories:
 		try:
-			cat_selector = selector_exists(page, f'div[role="button"]:has-text("{cat.strip()}")')
-			
-			if cat_selector: 
-				cat_selector.click() 
-			else: 
-				page.click(f'div[role="radio"]:has-text("{cat.strip()}")') 
-
-			page.wait_for_timeout(random.randint(2000, 4000))
+			page.click(f'div[role="button"] span:text-is("{cat.strip()}")', timeout=3000)
 		except:
-			page.fill('input[aria-label="Category"]', '')
-			page.fill('input[aria-label="Category"]', categories[-1].strip())
+			page.click(f'div[role="radio"] span:text-is("{cat.strip()}")', timeout=3000)
+
+		page.wait_for_timeout(random.randint(2000, 4000))
+
+
+def selector_exists(page, selector, timeout=3000):
+    try:
+        sel = page.wait_for_selector(selector, timeout=timeout, state='attached')
+        return sel
+    except:
+        return False
+
+
+def add_fields_for_items(data, page):
+	# Title
+	page.wait_for_timeout(random.randint(1000, 3000))
+	page.type('label[aria-label="Title"] input', str(data['title']))
+	
+	# Scroll to "Category" select field
+	page.wait_for_timeout(random.randint(1000, 3000))
+	select_category(selector='label[aria-label="Category"]', data=data, page=page)	
 	
 	
 	# Scroll and select to "Condition"
@@ -177,8 +162,6 @@ def add_fields_for_vehicles(data, scraper):
 	scraper.element_click_by_xpath('//span[text()="' + data['Fuel Type'] + '"]')
 
 # Add specific fields for listing from type item
-
-
 def generate_title_for_listing_type(data, listing_type):
 	title = ''
 

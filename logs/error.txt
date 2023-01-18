@@ -80,4 +80,70 @@ waiting for selector "label[aria-label="Description"] textarea"
 ============================================================Navigation failed because page was closed!
 =========================== logs ===========================
 navigating to "https://www.facebook.com/", waiting until "networkidle"
-============================================================
+============================================================Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "css=svg[aria-label='Your profile']"
+============================================================ 
+
+ occured: 2023-01-07 00:19:24.323240Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "css=svg[aria-label='Your profile']"
+============================================================ 
+
+ occured: 2023-01-07 00:21:32.933144Target closed
+=========================== logs ===========================
+waiting for selector "css=input[id='email']"
+  selector resolved to visible <input id="email" type="text" name="email" autofocus="1…/>
+elementHandle.type("andreypetrovmdea@outlook.com")
+============================================================ 
+
+ occured: 2023-01-07 00:21:55.143940Error: strict mode violation: "span >> :scope:has-text("Create story")" resolved to 2 elements:
+    1) <span dir="auto" class="x193iq5w xeuugli x13faqbe x1vv…>…</span> aka playwright.$("span:has-text("Create story") >> nth=0")
+    2) <span class="x1lliihq x6ikm8r x10wlt62 x1n2onr6 x1j85h…>Create story</span> aka playwright.$("text=Create story")
+
+=========================== logs ===========================
+waiting for selector "css=span >> :scope:has-text("Create story")"
+  Error: strict mode violation: "span >> :scope:has-text("Create story")" resolved to 2 elements:
+    1) <span dir="auto" class="x193iq5w xeuugli x13faqbe x1vv…>…</span> aka playwright.$("span:has-text("Create story") >> nth=0")
+    2) <span class="x1lliihq x6ikm8r x10wlt62 x1n2onr6 x1j85h…>Create story</span> aka playwright.$("text=Create story")
+
+============================================================ 
+
+ occured: 2023-01-07 00:25:56.925148Wrong credentials
+Invalid username or password 
+
+ occured: 2023-01-07 00:27:27.753375Target closed
+=========================== logs ===========================
+waiting for selector "css=span:has-text("Item for Sale") >> nth=1"
+============================================================ 
+
+ occured: 2023-01-07 00:28:39.624892Target closed
+=========================== logs ===========================
+waiting for selector "css=input[accept="image/*,image/heif,image/heic"]"
+============================================================ 
+
+ occured: 2023-01-07 00:59:59.004737Navigation failed because page was closed!
+=========================== logs ===========================
+navigating to "https://www.facebook.com/marketplace/?ref=app_tab", waiting until "networkidle"
+============================================================ 
+
+ occured: 2023-01-07 01:23:31.266445Navigation failed because page was closed!
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================ 
+
+ occured: 2023-01-07 01:23:37.270595Navigation failed because page was closed!
+=========================== logs ===========================
+navigating to "https://www.facebook.com/", waiting until "networkidle"
+============================================================ 
+
+ occured: 2023-01-07 01:23:41.861361list indices must be integers or slices, not str 
+
+ occured: 2023-01-08 05:04:31.891505list indices must be integers or slices, not str 
+
+ occured: 2023-01-08 05:06:07.156842Target closed
+=========================== logs ===========================
+waiting for selector "input[aria-label="Category"]"
+============================================================ 
+
+ occured: 2023-01-08 05:09:50.664066

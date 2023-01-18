@@ -1,0 +1,7 @@
+1. ✅ selector_exists timeout increase 
+2. on machine_id raise exception instead of print
+3. delay delete while typing
+4. trial run come neg
+5. marketplace-bot trial-logs rename
+6. multiple image upload
+7. page.locator('css=span:has-text("Item for Sale") >> nth=1').click(), not only items, but also vehicle 

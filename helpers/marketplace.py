@@ -8,7 +8,7 @@ import os
 class Marketplace():
     def __init__(self, proxy=None, viewport=None):
         self.playwright = sync_playwright().start()
-        self.browser = self.playwright.firefox.launch(headless=False)
+        self.browser = self.playwright.chromium.launch(headless=False)
         self.context = self.browser.new_context(proxy={"server": f"{proxy.split(':')[0]}:{proxy.split(':')[1]}", "username": proxy.split(":")[2], "password": proxy.split(":")[3]} if proxy else None)
         self.page = self.context.new_page()
         if viewport:
@@ -61,7 +61,7 @@ class Marketplace():
             raise Exception(self.page.locator("css=div[id='error_box']").inner_text())
 
         # Ensure login
-        self.page.locator("css=svg[aria-label='Your profile']").wait_for(state="attached")
+        self.page.locator("css=span", has_text="What's on your mind,").wait_for(state="attached", timeout=5000)
 
         # save cookies for next login
         if not os.path.exists("inputs/cookies/"):
