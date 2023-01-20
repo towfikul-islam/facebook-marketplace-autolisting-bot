@@ -6,6 +6,7 @@ from datetime import datetime
 import random
 from loguru import logger
 
+contact_url = "https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share"
 logger.add('logs.txt')
 auth = Auth(USER_ID, GS_SA)
 user = auth.get_features()
@@ -17,25 +18,34 @@ idx_run_limit = auth.headers.index("run_limit")+1
 
 # If listings are empty stop the function
 if not LISTINGS:
-    logger.error(f"No items found")
+    logger.error(f"No items found in the excel sheet!")
 
-# Loop through the accounts and post the listings
-for account in ACCOUNTS:
-    fb = Marketplace(proxy=account['proxy'], viewport=VIEWPORT)
+# Loop through the accounts 
+for acc_idx, account in enumerate(ACCOUNTS):
+    print(account)
+    print(account['proxy_ip'])
+    print(type(account['proxy_ip']))
+    if account['proxy_ip'] and not user['proxy']:
+        logger.error(f"Proxy feature is not activated in your account. \nActivate from here: {contact_url}")
+
+    fb = Marketplace(proxy=account['proxy_address'], viewport=VIEWPORT)
+
+    if acc_idx > 0 and not user['multiple_account']:
+        logger.error(f"Posting in multiple facebook id feature is not activated in your account. \nActivate from here: {contact_url}")
+
     try:
-        fb.login(username=account['login']['id'], password=account['login']['password'], cookies=account['cookies'])
-        for file in LISTINGS:
-            for item in file['items']:
-                if not user['paid'] and int(auth.get_values(user['row'], idx_run_limit)) == 0: 
-                    raise Exception("Trial session is over. It's high time to purchase! \nContact the developer: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share")
-                     
-                publish_listing(item, file['type'], fb.page) 
+        fb.login(username=account['main'], password=account['password'], cookies=account['cookies'])
+        for item in LISTINGS:
+            if not user['paid'] and int(auth.get_values(user['row'], idx_run_limit)) == 0: 
+                logger.error(f"Trial session is over. It's high time to purchase! \nContact the developer: {contact_url}")
+                    
+            publish_listing(item, fb.page) 
 
-                if user['paid']:
-                    auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
-                else:
-                    auth.worksheet.update_cell(user['row'], idx_run_limit, int(auth.get_values(user['row'], idx_run_limit))-1)
-                    auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
+            if user['paid']:
+                auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
+            else:
+                auth.worksheet.update_cell(user['row'], idx_run_limit, int(auth.get_values(user['row'], idx_run_limit))-1)
+                auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
     except Exception as e:
         logger.error(e)
         continue

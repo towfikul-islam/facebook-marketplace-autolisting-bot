@@ -2,3 +2,30 @@
 =========================== logs ===========================
 waiting for selector "div[role="radio"] span:text-is("Home & Kitchen")"
 ============================================================
+2023-01-21 04:24:46.882 | ERROR    | __main__:<module>:21 - No items found
+2023-01-21 04:42:46.734 | ERROR    | __main__:<module>:26 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:43:17.895 | ERROR    | __main__:<module>:27 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:43:58.168 | ERROR    | __main__:<module>:27 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:44:56.553 | ERROR    | __main__:<module>:27 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:48:59.055 | ERROR    | __main__:<module>:27 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:50:17.657 | ERROR    | __main__:<module>:27 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:50:45.347 | ERROR    | __main__:<module>:28 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:51:58.796 | ERROR    | __main__:<module>:28 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:57:07.749 | ERROR    | __main__:<module>:28 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:57:19.377 | ERROR    | __main__:<module>:28 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:57:49.425 | ERROR    | __main__:<module>:28 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 04:59:06.429 | ERROR    | __main__:<module>:28 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
+2023-01-21 05:01:25.423 | ERROR    | __main__:<module>:29 - Proxy feature is not activated in your account. 
+Activate from here: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share
