@@ -3,3 +3,4 @@ pandas
 openpyxl
 gspread
 oauth2client
+exif

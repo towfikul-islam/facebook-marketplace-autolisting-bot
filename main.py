@@ -18,25 +18,26 @@ idx_run_limit = auth.headers.index("run_limit")+1
 
 # If listings are empty stop the function
 if not LISTINGS:
-    logger.error(f"No items found in the excel sheet!")
+    logger.error(f"No items found in the excel sheet")
 
 # Loop through the accounts 
 for acc_idx, account in enumerate(ACCOUNTS):
     if account['proxy_ip'] and not user['proxy']:
-        logger.error(f"Proxy feature is not activated in your account. \nActivate from here: {contact_url}")
-
-    fb = Marketplace(proxy=account['proxy_address'], viewport=VIEWPORT)
+        logger.warning(f"PROXY feature is not activated in your account")
+        account['proxy_address'] = None
 
     if acc_idx > 0 and not user['multiple_account']:
-        logger.error(f"Posting in multiple facebook id feature is not activated in your account. \nActivate from here: {contact_url}")
+        logger.error(f"Posting in MULTIPLE FACEBOOK ACCOUNT feature is not activated in your account")
+
+    fb = Marketplace(proxy=account['proxy_address'], viewport=VIEWPORT)
 
     try:
         fb.login(username=account['main'], password=account['password'], cookies=account['cookies'])
         for item in LISTINGS:
             if not user['paid'] and int(auth.get_values(user['row'], idx_run_limit)) == 0: 
-                logger.error(f"Trial session is over. It's high time to purchase! \nContact the developer: {contact_url}")
+                logger.error(f"Trial session is over. It's high time to purchase!")
                     
-            publish_listing(item, fb.page) 
+            publish_listing(item, fb.page, user) 
 
             if user['paid']:
                 auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
@@ -47,7 +48,7 @@ for acc_idx, account in enumerate(ACCOUNTS):
         logger.error(e)
         continue
     else:
-        print(f"Successfully posted items on account: {account['login']['id']}")
+        logger.success(f"Successfully posted items on account: {account['login']['id']}")
     finally:
         fb.browser.close()
         fb.playwright.stop()

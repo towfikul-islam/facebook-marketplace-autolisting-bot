@@ -1,12 +1,12 @@
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 import random
 import os
-import pathlib
+from helpers.img_helper import add_img_watermark, remove_img_meta
 from loguru import logger
 
 def upload(images, page):
 	if not images:
-		logger.warning('Product does not contain any images!')
+		logger.warning('Product does not contain any images')
 	
 	# upload files
 	page.wait_for_timeout(random.randint(1000, 3000))
@@ -35,9 +35,13 @@ def generate_multiple_images_path(images):
 
 	return images_path
 
-def publish_listing(data, page):
+def publish_listing(data, page, user):
 	# go to listing page
 	page.goto('https://www.facebook.com/marketplace/create/item', wait_until='networkidle')
+
+	# if user['duplicate_img']:
+	# 	duplicate_img = 
+
 
 	# Create string that contains all of the image paths separeted by \n
 	images_path = generate_multiple_images_path(data['photos'])
@@ -90,20 +94,19 @@ def publish_listing(data, page):
 		page.click('ul[role="listbox"] li:first-child > div')
 
 	# Go to the next step
-	page.click('div[aria-label="Next"]')
 	page.wait_for_timeout(random.randint(1000, 3000))
+	page.click('div[aria-label="Next"]')
 
 	# few category items has 2nd Next button
 	if selector_exists(page, 'div[aria-label="Next"]'):
-		page.click('div[aria-label="Next"]')
 		page.wait_for_timeout(random.randint(1000, 3000))
+		page.click('div[aria-label="Next"]')
+		page.wait_for_load_state('networkidle')
 
 	# Publish the listing
+	page.wait_for_timeout(random.randint(1000, 3000))
 	page.click('div[aria-label="Publish"]')
-
-    # wait for network to finish loading
 	page.wait_for_load_state('networkidle')
-
 
 	# # Add listing to multiple groups
 	# # add_listing_to_multiple_groups(data, scraper)

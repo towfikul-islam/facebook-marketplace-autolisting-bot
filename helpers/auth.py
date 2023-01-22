@@ -1,6 +1,6 @@
 import gspread
 import socket
-
+from loguru import logger
 
 class Auth():
     def __init__(self, user_id, service_acc):
@@ -17,7 +17,7 @@ class Auth():
         if user_instance:
             return user_instance
         else:
-            raise Exception('Could not find your software license \n Contact the developer.')
+            logger.error('USER ID is not found!')
     
     def get_features(self):
         all = self.worksheet.get_all_records()
@@ -33,7 +33,7 @@ class Auth():
                 return usr
                 
     def login(self):
-        error_text = "This machine is not registered! \nContact the developer: https://www.upwork.com/services/product/development-it-a-facebook-marketplace-automation-bot-auto-listing-auto-reply-bot-1506700857494228992?ref=project_share"
+        error_text = "This machine is not registered under your software license! You've to purchase the MULTIPLE MACHINE feature."
         machine_id = self.user['machine_id']
         machines = [m.strip() for m in machine_id.split(';')]
         current_machine = socket.gethostname()
@@ -46,7 +46,7 @@ class Auth():
             if self.user['multiple_machine']:
                 machines.append(current_machine)
             else:
-                raise Exception(error_text)
+                logger.error(error_text)
         
         self.worksheet.update_cell(self.user["row"], self.headers.index("machine_id")+1, '; '.join(machines)) 
         return True 
