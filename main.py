@@ -22,9 +22,6 @@ if not LISTINGS:
 
 # Loop through the accounts 
 for acc_idx, account in enumerate(ACCOUNTS):
-    print(account)
-    print(account['proxy_ip'])
-    print(type(account['proxy_ip']))
     if account['proxy_ip'] and not user['proxy']:
         logger.error(f"Proxy feature is not activated in your account. \nActivate from here: {contact_url}")
 
