@@ -3,14 +3,14 @@ from pathlib import Path
 import os
 from helpers.file_helper import read_file
 
-LISTINGS = read_file('inputs/products.xlsx', worksheet='items')
+LISTINGS = read_file(os.path.join(os.getcwd(), 'inputs', 'products.xlsx'), worksheet='items')
 ACCOUNTS = []
-SETTINGS = read_file('inputs/products.xlsx', worksheet='settings')[0]
-acc_info = read_file('inputs/products.xlsx', worksheet='accounts')
-GS_SA = json.loads(Path("helpers/gs_sa.json").read_text())
+SETTINGS = read_file(os.path.join(os.getcwd(), 'inputs', 'products.xlsx'), worksheet='settings')[0]
+acc_info = read_file(os.path.join(os.getcwd(), 'inputs', 'products.xlsx'), worksheet='accounts')
+GS_SA = json.loads(Path(os.path.join(os.getcwd(), 'helpers', 'gs_sa.json')).read_text())
 
 for acc in acc_info:
-    cookie_file = 'inputs/cookies/' + acc['mail'] + ".json"
+    cookie_file = os.path.join(os.getcwd(), 'inputs', 'cookies', acc['mail'] + ".json")
 
     ACCOUNTS.append({
         **acc, 

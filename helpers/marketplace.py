@@ -61,6 +61,6 @@ class Marketplace():
         self.page.locator("css=span", has_text="What's on your mind,").wait_for(state="attached", timeout=5000)
 
         # save cookies for next login
-        if not os.path.exists("inputs/cookies/"):
-            os.mkdir("inputs/cookies")
-        Path("inputs/cookies/"+username+".json").write_text(json.dumps(self.context.cookies()))
+        if not os.path.exists(os.path.join(os.getcwd(), 'inputs', 'cookies')):
+            os.mkdir(os.path.join(os.getcwd(), 'inputs', 'cookies'))
+        Path(os.path.join(os.getcwd(), 'inputs', 'cookies', username+".json")).write_text(json.dumps(self.context.cookies()))
