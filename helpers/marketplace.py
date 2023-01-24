@@ -4,15 +4,12 @@ import random
 from pathlib import Path
 import os
 
-
 class Marketplace():
-    def __init__(self, proxy=None, viewport=None):
+    def __init__(self, proxy=None):
         self.playwright = sync_playwright().start()
-        self.browser = self.playwright.chromium.launch(headless=False)
+        self.browser = self.playwright.firefox.launch(headless=False)
         self.context = self.browser.new_context(proxy={"server": f"{proxy.split(':')[0]}:{proxy.split(':')[1]}", "username": proxy.split(":")[2], "password": proxy.split(":")[3]} if proxy else None)
         self.page = self.context.new_page()
-        if viewport:
-            self.page.set_viewport_size(viewport)
 
     def is_captcha(self):
         try:
@@ -42,11 +39,11 @@ class Marketplace():
 
             # Username
             self.page.wait_for_timeout(random.randint(3000, 5000))
-            self.page.locator("css=input[id='email']").type(username, delay=200)
+            self.page.locator("css=input[id='email']").type(username)
 
             # Password
             self.page.wait_for_timeout(random.randint(3000, 5000))
-            self.page.locator("css=input[id='pass']").type(password, delay=200)
+            self.page.locator("css=input[id='pass']").type(password)
             
             # Login
             self.page.wait_for_timeout(random.randint(3000, 5000))

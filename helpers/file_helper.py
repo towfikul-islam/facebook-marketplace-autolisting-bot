@@ -1,17 +1,17 @@
 import os
 import pandas as pd
+from loguru import logger
 
-def read_file(file_name, data_format='list'):
+def read_file(file_name, worksheet, data_format='dict'):
 	file_dir = os.path.join(os.getcwd(), file_name)
-	file_format = file_name.split('.')[-1]
 	data = []
 
 	try:
-		df = pd.read_csv(file_dir) if file_format == "csv" else pd.read_excel(file_dir)
+		df = pd.read_excel(file_dir, sheet_name=worksheet) if worksheet else pd.read_excel(file_dir)
+		df = df.where(pd.notnull(df), False)
 		data = df.to_dict('records') if data_format == 'dict' else df.values.tolist()
 	except Exception as e:
-		print(e)
-        
+		logger.error("You must save and close the excel file while the script is running")
 	return data
 
 
