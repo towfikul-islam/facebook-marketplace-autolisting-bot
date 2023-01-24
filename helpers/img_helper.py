@@ -1,10 +1,9 @@
 import os
 import random
-from exif import Image
+from PIL import Image as PIL_IMAGE
+from PIL import ImageDraw, ImageFont
+from exif import Image as EXIF_IMAGE
 from loguru import logger
-from PIL import Image, ImageDraw, ImageFont
-
-logger.add('logs.txt')
 
 def check_format(filename):
     img_formats = ['png', 'jpg', 'jpeg', 'PNG', 'JPG', 'JPEG']
@@ -13,51 +12,81 @@ def check_format(filename):
     if file_format not in img_formats:
         logger.error(f"Image: {filename} | {file_format} is not supported in editing mode")
 
-def add_img_watermark(photo_title, text, f_in=os.path.join(os.getcwd(), 'photos'), f_out=os.path.join(os.getcwd(), 'photos', 'modified')):
+def add_img_watermark(images, text, font_size, f_in=os.path.join(os.getcwd(), 'inputs', 'photos'), f_out=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')):
     if not os.path.exists(f_out):
         os.mkdir(f_out)
 
-    photo_path = os.path.join(f_in, photo_title)
-    check_format(photo_path)
+    image_names = images.split(';')
+    edited = []
 
-    #Create an Image Object from an Image
-    im = Image.open(photo_path)
-    width, height = im.size
+    for image_name in image_names:
+        image_name = image_name.strip()
+        photo_path = os.path.join(f_in, image_name)
+        
+        #Create an Image Object from an Image
+        im = PIL_IMAGE.open(photo_path)
+        width, height = im.size
 
-    draw = ImageDraw.Draw(im)
+        draw = ImageDraw.Draw(im)
 
-    font = ImageFont.truetype('fonts/DancingScript-Medium.ttf', 50)
-    textwidth, textheight = draw.textsize(text, font)
+        font = ImageFont.truetype(os.path.join(os.getcwd(), 'inputs', 'fonts', 'DancingScript-Medium.ttf'), font_size)
+        textwidth, textheight = draw.textsize(text, font)
 
-    # calculate the x,y coordinates of the text
-    free_width = width - textwidth
-    free_height = height - textheight
+        # calculate the x,y coordinates of the text
+        free_width = width - textwidth
+        free_height = height - textheight
 
-    margin = 10
-    x = random.randrange(margin, free_width)
-    y = random.randrange(margin, free_height)
+        margin = 10
+        x = random.randrange(margin, free_width)
+        y = random.randrange(margin, free_height)
 
-    draw.text((x, y), text, font=font)
+        draw.text((x, y), text, font=font)
 
-    # convert png to jpg since exif supports only JPG
-    img = im.convert('RGB')
+        # convert png to jpg since exif supports only JPG
+        img = im.convert('RGB')
 
-    #Save watermarked image
-    img.save(os.path.join(f_out, f"{'.'.join(photo_title.split('.')[:-1])}.jpg"))
+        output_name = f"{'.'.join(image_name.split('.')[:-1])}.jpg"
 
-    logger.success(f"image: {photo_title} | watermark applied | saved as {photo_title}.jpg")
+        #Save watermarked image
+        img.save(os.path.join(f_out, output_name))
+
+        edited.append(output_name)
+
+        logger.success(f"{image_name} | watermark applied | saved as JPG")
+
+    return ';'.join(edited)   
 
 
-def remove_img_meta(photo_title, f_in=os.path.join(os.getcwd(), 'photos', 'modified'), f_out=os.path.join(os.getcwd(), 'photos', 'modified')):
-    photo_path = os.path.join(f_in, photo_title)
-    check_format(photo_path)
 
-    with open(photo_path, "rb") as f:
-        photo = Image(f)
+def remove_img_meta(images, f_in=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited'), f_out=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')):
+    image_names = images.split(';')
+
+    for image_name in image_names:
+        photo_path = os.path.join(f_in, image_name.strip())
+        check_format(photo_path)
+
+        with open(photo_path, "rb") as f:
+            photo = EXIF_IMAGE(f)
+        
+        if photo.has_exif:
+            photo.delete_all()
+
+            with open(f_out, 'wb') as f:
+                f.write(photo.get_file())
+        
+        logger.success(f"{image_name} | metadata removed | saved")
+
+    return images
+
+def generate_multiple_images_path(images, multiple_feature, f_out=os.path.join(os.getcwd(), 'inputs', 'photos')):
+    image_names = []
+
+    # Split image names into array by this symbol ";" and make a list
+    for idx, image_name in enumerate(images.split(';')):
+        if idx > 0 and not multiple_feature:
+            logger.warning("You are not allowed to use MULTIPLE IMAGES feature. Buy to activate!")
+            continue
+        image_names.append(os.path.join(f_out, image_name))
+
+    return image_names
     
-    photo.delete_all()
-
-    with open(f_out, 'wb') as f:
-        f.write(photo.get_file())
-    
-    logger.success(f"image: {photo_title} | metadata removed | image saved")

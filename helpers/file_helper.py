@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from loguru import logger
 
 def read_file(file_name, worksheet, data_format='dict'):
 	file_dir = os.path.join(os.getcwd(), file_name)
@@ -10,7 +11,7 @@ def read_file(file_name, worksheet, data_format='dict'):
 		df = df.where(pd.notnull(df), False)
 		data = df.to_dict('records') if data_format == 'dict' else df.values.tolist()
 	except Exception as e:
-		print(e)
+		logger.error("You must save and close the excel file while the script is running")
 	return data
 
 

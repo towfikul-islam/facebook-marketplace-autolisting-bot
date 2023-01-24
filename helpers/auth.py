@@ -1,6 +1,7 @@
 import gspread
 import socket
 from loguru import logger
+import os
 
 class Auth():
     def __init__(self, user_id, service_acc):
@@ -41,13 +42,19 @@ class Auth():
         if not machine_id:
             self.worksheet.update_cell(self.user["row"], self.headers.index("machine_id")+1, current_machine)  
             return True
-
+        
         if current_machine not in machines:
             if self.user['multiple_machine']:
                 machines.append(current_machine)
             else:
                 logger.error(error_text)
         
+        if self.user['machine_limit']:
+            if len(machines) > self.user['machine_limit']:
+                logger.warning(f"Machine limit exceeded! You can use this script in {self.user['machine_limit']} machine")
+                os.system("pause")
+                exit()
+
         self.worksheet.update_cell(self.user["row"], self.headers.index("machine_id")+1, '; '.join(machines)) 
         return True 
 

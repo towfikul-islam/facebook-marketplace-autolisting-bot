@@ -1,53 +1,51 @@
-from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
-import random
 import os
-from helpers.img_helper import add_img_watermark, remove_img_meta
+import shutil
+import random
 from loguru import logger
+from helpers.file_helper import read_file
+from helpers.img_helper import add_img_watermark, remove_img_meta, generate_multiple_images_path
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 def upload(images, page):
 	if not images:
-		logger.warning('Product does not contain any images')
+		logger.warning('Product does not contain any image')
 	
 	# upload files
 	page.wait_for_timeout(random.randint(1000, 3000))
 	page.locator('css=input[accept="image/*,image/heif,image/heic"]').set_input_files(images)
 
-	page.wait_for_timeout(10000)
 
-def generate_multiple_images_path(images):
-	images_path = ''
-
-	# Split image names into array by this symbol ";"
-	image_names = images.split(';')
-
-	# Create string that contains all of the image paths separeted by \n
-	if image_names:
-		# images_path = ('\n').join([os.path.join(path, item.strip()) for item in image_names])
-		for image_name in image_names:
-			# Remove whitespace before and after the string
-			image_name = image_name.strip()
-
-			# Add "\n" for indicating new file
-			if images_path != '':
-				images_path += '\n'
-
-			images_path += os.getcwd().replace("\\", "/") + "/inputs/photos/" + image_name
-
-	return images_path
-
-def publish_listing(data, page, user):
+def publish_listing(data, page, user, account, settings):
 	# go to listing page
 	page.goto('https://www.facebook.com/marketplace/create/item', wait_until='networkidle')
 
-	# if user['duplicate_img']:
-	# 	duplicate_img = 
+	if data['photos']:
+		edited_img_dir = os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')
+
+		if user['duplicate_img']:
+			watermark_text = settings['watermark_text'] if settings['watermark_text'] else account['mail']
+			watermark_font_size = settings['watermark_font_size'] if settings['watermark_font_size'] else 40
+
+			# add a watermark in images
+			imgs_watermarked = add_img_watermark(data['photos'], text=watermark_text, font_size=watermark_font_size)
+
+			# remove the infomation that remains attached to the image
+			imgs_exif_removed = remove_img_meta(imgs_watermarked) 
+
+			# Create string that contains all of the image paths separeted by \n
+			images_path = generate_multiple_images_path(imgs_exif_removed, user['multiple_img'], f_out=edited_img_dir)
+		else:
+			# Create string that contains all of the image paths separeted by \n
+			images_path = generate_multiple_images_path(data['photos'], user['multiple_img'])
 
 
-	# Create string that contains all of the image paths separeted by \n
-	images_path = generate_multiple_images_path(data['photos'])
-	# Add images to the the listing
-	upload(images_path, page)
-	page.wait_for_timeout(random.randint(1000, 3000))
+		# Add images to the the listing
+		upload(images_path, page)
+		page.wait_for_timeout(random.randint(1000, 3000))
+
+		# deleting edited img folder, since it'll not be used anymore
+		if user['duplicate_img']:
+			shutil.rmtree(edited_img_dir)
 	
 	# Title
 	page.wait_for_timeout(random.randint(1000, 3000))
@@ -103,14 +101,32 @@ def publish_listing(data, page, user):
 		page.click('div[aria-label="Next"]')
 		page.wait_for_load_state('networkidle')
 
+	# Add listing to multiple groups
+	if data['groups']:
+		if user['group_posting']:
+			add_listing_to_multiple_groups(data['groups'], page)
+		else:
+			logger.warning('You are not allowed to use GROUP_POSTING feature. Buy to activate!')
+
 	# Publish the listing
 	page.wait_for_timeout(random.randint(1000, 3000))
 	page.click('div[aria-label="Publish"]')
 	page.wait_for_load_state('networkidle')
 
-	# # Add listing to multiple groups
-	# # add_listing_to_multiple_groups(data, scraper)
 
+def add_listing_to_multiple_groups(groups_text, page):
+	# Create an array for group names by spliting the string by this symbol ";"
+	group_names = groups_text.split(';')
+
+	# Post in different groups
+	for group_name in group_names:
+		# Remove whitespace before and after the name
+		group_name = group_name.strip()
+
+		page.click(f'span:text-is("{group_name}")')
+		page.wait_for_timeout(random.randint(1000, 3000))
+
+		
 def select_category(selector, data, page):
 	category_label = page.locator(selector)
 	category_label.scroll_into_view_if_needed()
@@ -126,27 +142,10 @@ def select_category(selector, data, page):
 		except:
 			page.click(f'div[role="radio"] span:text-is("{cat.strip()}")', timeout=3000)
 
-		page.wait_for_timeout(random.randint(2000, 4000))
-
 
 def selector_exists(page, selector, timeout=3000):
-    try:
-        sel = page.wait_for_selector(selector, timeout=timeout, state='attached')
-        return sel
-    except:
-        return False
-
-def add_listing_to_multiple_groups(data, scraper):
-	# Create an array for group names by spliting the string by this symbol ";"
-	group_names = data['Groups'].split(';')
-
-	# If the groups are empty do not do nothing
-	if not group_names:
-		return
-
-	# Post in different groups
-	for group_name in group_names:
-		# Remove whitespace before and after the name
-		group_name = group_name.strip()
-
-		scraper.element_click_by_xpath('//span[text()="' + group_name + '"]')
+	try:
+		sel = page.locator(selector).is_visible(timeout=timeout)
+		return sel
+	except:
+		return False
