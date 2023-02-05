@@ -30,6 +30,7 @@ class Marketplace():
 
 
     def login(self, username=None, password=None, cookies=None):
+        username = str(username)
         
         if cookies:
             self.context.add_cookies(json.loads(cookies))

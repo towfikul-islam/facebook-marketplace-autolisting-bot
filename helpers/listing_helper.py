@@ -3,7 +3,7 @@ import shutil
 import random
 from loguru import logger
 from helpers.file_helper import read_file
-from helpers.img_helper import add_img_watermark, remove_img_meta, generate_multiple_images_path
+from helpers.img_helper import add_img_watermark, remove_img_meta, generate_multiple_images_path, crop_img
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 def upload(images, page):
@@ -26,14 +26,17 @@ def publish_listing(data, page, user, account, settings):
 			watermark_text = settings['watermark_text'] if settings['watermark_text'] else account['mail']
 			watermark_font_size = settings['watermark_font_size'] if settings['watermark_font_size'] else 40
 
-			# add a watermark in images
-			imgs_watermarked = add_img_watermark(data['photos'], text=watermark_text, font_size=watermark_font_size)
+			# crop images
+			imgs_cropped = crop_img(data['photos'])
 
-			# remove the infomation that remains attached to the image
-			imgs_exif_removed = remove_img_meta(imgs_watermarked) 
+			# # add a watermark in images
+			# imgs_watermarked = add_img_watermark(imgs_cropped, text=watermark_text, font_size=watermark_font_size)
+
+			# # remove the infomation that remains attached to the image
+			# imgs_exif_removed = remove_img_meta(imgs_watermarked) 
 
 			# Create string that contains all of the image paths separeted by \n
-			images_path = generate_multiple_images_path(imgs_exif_removed, user['multiple_img'], f_out=edited_img_dir)
+			images_path = generate_multiple_images_path(imgs_cropped, user['multiple_img'], f_out=edited_img_dir)
 		else:
 			# Create string that contains all of the image paths separeted by \n
 			images_path = generate_multiple_images_path(data['photos'], user['multiple_img'])
@@ -80,7 +83,7 @@ def publish_listing(data, page, user, account, settings):
 	# sku (optional)
 	if data['sku_id']:
 		page.wait_for_timeout(random.randint(1000, 3000))
-		page.type('css=label[aria-label="SKU"] input', data['sku_id'])
+		page.type('css=label[aria-label="SKU"] input', str(data['sku_id']))
 
 	# location (optional)
 	if data['location']:
@@ -91,15 +94,20 @@ def publish_listing(data, page, user, account, settings):
 		page.wait_for_timeout(random.randint(3000, 5000))
 		page.click('ul[role="listbox"] li:first-child > div')
 
+	if not selector_exists(page, 'div[aria-label="Next"]'):
+		page.wait_for_timeout(random.randint(1000, 3000))
+		select_category(selector='label[aria-label="Category"]', data=data, page=page)	
+
 	# Go to the next step
 	page.wait_for_timeout(random.randint(1000, 3000))
 	page.click('div[aria-label="Next"]')
+	page.wait_for_load_state('networkidle')
 
 	# few category items has 2nd Next button
-	if selector_exists(page, 'div[aria-label="Next"]'):
-		page.wait_for_timeout(random.randint(1000, 3000))
-		page.click('div[aria-label="Next"]')
-		page.wait_for_load_state('networkidle')
+	# if selector_exists(page, 'div[aria-label="Next"]'):
+	# 	page.wait_for_timeout(random.randint(1000, 3000))
+	# 	page.click('div[aria-label="Next"]')
+	# 	page.wait_for_load_state('networkidle')
 
 	# Add listing to multiple groups
 	if data['groups']:
@@ -137,10 +145,14 @@ def select_category(selector, data, page):
 	categories = data['category'].split(';')
 
 	for cat in categories:
-		try:
-			page.click(f'div[role="button"] span:text-is("{cat.strip()}")', timeout=3000)
-		except:
-			page.click(f'div[role="radio"] span:text-is("{cat.strip()}")', timeout=3000)
+		# try:
+		# 	page.click(f'div[role="button"] span:text-is("{cat.strip()}")')
+		# except:
+		# 	page.click(f'div[role="radio"] span:text-is("{cat.strip()}")')
+
+		page.click(f'span:text-is("{cat.strip()}")')
+		page.wait_for_timeout(random.randint(1000, 3000))
+		
 
 
 def selector_exists(page, selector, timeout=3000):

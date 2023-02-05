@@ -12,7 +12,7 @@ def check_format(filename):
     if file_format not in img_formats:
         logger.error(f"Image: {filename} | {file_format} is not supported in editing mode")
 
-def add_img_watermark(images, text, font_size, f_in=os.path.join(os.getcwd(), 'inputs', 'photos'), f_out=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')):
+def add_img_watermark(images, text, font_size, f_in=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited'), f_out=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')):
     if not os.path.exists(f_out):
         os.mkdir(f_out)
 
@@ -56,6 +56,40 @@ def add_img_watermark(images, text, font_size, f_in=os.path.join(os.getcwd(), 'i
 
     return ';'.join(edited)   
 
+
+def crop_img(images, f_in=os.path.join(os.getcwd(), 'inputs', 'photos'), f_out=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')):
+    if not os.path.exists(f_out):
+        os.mkdir(f_out)
+
+    image_names = images.split(';')
+    edited = []
+
+    for image_name in image_names:
+        image_name = image_name.strip()
+        photo_path = os.path.join(f_in, image_name)
+        
+        #Create an Image Object from an Image
+        im = PIL_IMAGE.open(photo_path)
+        width, height = im.size
+
+        # generate random cropping co-ordinates
+        margin = round((width/random.randrange(10,15))+(height/random.randrange(10,15))/2)
+        left = random.randrange(0, margin)
+        right = width - random.randrange(0, margin)
+        top = random.randrange(0, margin)
+        bottom = height - random.randrange(0, margin)
+
+        # crop the image
+        cropped = im.crop((left, top, right, bottom))
+
+        #Save cropped image
+        cropped.save(os.path.join(f_out, image_name))
+
+        edited.append(image_name)
+
+        logger.success(f"{image_name} | cropped | saved")
+
+    return ';'.join(edited)   
 
 
 def remove_img_meta(images, f_in=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited'), f_out=os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')):

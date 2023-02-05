@@ -10,7 +10,7 @@ acc_info = read_file(os.path.join(os.getcwd(), 'inputs', 'products.xlsx'), works
 GS_SA = json.loads(Path(os.path.join(os.getcwd(), 'helpers', 'gs_sa.json')).read_text())
 
 for acc in acc_info:
-    cookie_file = os.path.join(os.getcwd(), 'inputs', 'cookies', acc['mail'] + ".json")
+    cookie_file = os.path.join(os.getcwd(), 'inputs', 'cookies', str(acc['mail']) + ".json")
 
     ACCOUNTS.append({
         **acc, 

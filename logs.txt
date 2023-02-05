@@ -1,0 +1,43 @@
+2023-02-02 01:32:10.646 | ERROR    | __main__:<module>:49 - crop_img() got an unexpected keyword argument 'text'
+2023-02-02 01:33:25.276 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:34:20.436 | ERROR    | __main__:<module>:49 - text: expected string, got number
+2023-02-02 01:37:36.298 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:39:00.945 | ERROR    | __main__:<module>:49 - Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "ul[role="listbox"] li:first-child > div"
+============================================================
+2023-02-02 01:39:37.390 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:40:49.234 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:42:01.226 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:43:04.347 | SUCCESS  | __main__:<module>:52 - Successfully posted items on account: sosegij242@vingood.com
+2023-02-02 01:47:00.319 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:47:42.651 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:48:47.986 | ERROR    | __main__:<module>:49 - Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "div[aria-label="Next"]"
+  selector resolved to visible <div role="button" tabindex="-1" aria-label="Next" ar…>…</div>
+attempting click action
+  waiting for element to be visible, enabled and stable
+    element is not enabled - waiting...
+============================================================
+2023-02-02 01:51:10.692 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:51:54.689 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:52:41.158 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 01:53:47.480 | ERROR    | __main__:<module>:49 - Timeout 30000ms exceeded.
+=========================== logs ===========================
+waiting for selector "div[aria-label="Next"]"
+  selector resolved to visible <div role="button" tabindex="-1" aria-label="Next" ar…>…</div>
+attempting click action
+  waiting for element to be visible, enabled and stable
+    element is not enabled - waiting...
+============================================================
+2023-02-02 02:02:33.164 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 02:03:23.539 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 02:04:14.215 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-02 02:05:20.939 | SUCCESS  | __main__:<module>:52 - Successfully posted items on account: sosegij242@vingood.com
+2023-02-06 01:25:47.086 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-06 01:26:33.336 | SUCCESS  | helpers.img_helper:crop_img:90 - dress.jpg | cropped | saved
+2023-02-06 01:27:07.618 | ERROR    | __main__:<module>:49 - Target closed
+=========================== logs ===========================
+waiting for selector "css=label[aria-label="Product tags"] textarea"
+============================================================
