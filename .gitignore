@@ -2,7 +2,7 @@ helpers/__pycache__/
 helpers/gs_sa.json
 inputs/cookies/
 inputs/photos/
-inputs/accounts.txt
+inputs/products/xlsx
 test.py
 icon.ico
 edits.txt
