@@ -33,18 +33,46 @@ for acc_idx, account in enumerate(ACCOUNTS):
 
     try:
         fb.login(username=account['mail'], password=account['password'], cookies=account['cookies'])
-        for item in LISTINGS:
-            if not user['paid'] and int(auth.get_values(user['row'], idx_run_limit)) == 0: 
-                logger.error(f"Trial session is over. It's high time to purchase!")
-                break
-                    
-            publish_listing(item, fb.page, user, account, SETTINGS) 
+        
+        if SETTINGS['posting_strategy'] == 'tabs':
+            for idx, item in enumerate(LISTINGS):
+                context = fb if idx == 0 else fb.context.new_page()
+                context.goto('https://www.facebook.com/marketplace/create/item', wait_until='networkidle')
+                
+            for idx, item in enumerate(LISTINGS):
+                context.pages[idx]
 
-            if user['paid']:
-                auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
-            else:
-                auth.worksheet.update_cell(user['row'], idx_run_limit, int(auth.get_values(user['row'], idx_run_limit))-1)
-                auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
+                if not user['paid'] and int(auth.get_values(user['row'], idx_run_limit)) == 0: 
+                    logger.error(f"Trial session is over. It's high time to purchase!")
+                    break
+
+                # go to listing page
+                fb.page.goto('https://www.facebook.com/marketplace/create/item', wait_until='networkidle')
+                        
+                publish_listing(item, fb.page, user, account, SETTINGS) 
+
+                if user['paid']:
+                    auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
+                else:
+                    auth.worksheet.update_cell(user['row'], idx_run_limit, int(auth.get_values(user['row'], idx_run_limit))-1)
+                    auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
+
+        if SETTINGS['posting_strategy'] == 'sequential':
+            for item in LISTINGS:
+                if not user['paid'] and int(auth.get_values(user['row'], idx_run_limit)) == 0: 
+                    logger.error(f"Trial session is over. It's high time to purchase!")
+                    break
+
+                # go to listing page
+                fb.page.goto('https://www.facebook.com/marketplace/create/item', wait_until='networkidle')
+                        
+                publish_listing(item, fb.page, user, account, SETTINGS) 
+
+                if user['paid']:
+                    auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
+                else:
+                    auth.worksheet.update_cell(user['row'], idx_run_limit, int(auth.get_values(user['row'], idx_run_limit))-1)
+                    auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
     except Exception as e:
         logger.error(e)
         continue

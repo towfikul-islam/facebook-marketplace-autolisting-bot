@@ -16,9 +16,7 @@ def upload(images, page):
 
 
 def publish_listing(data, page, user, account, settings):
-	# go to listing page
-	page.goto('https://www.facebook.com/marketplace/create/item', wait_until='networkidle')
-
+	
 	if data['photos']:
 		edited_img_dir = os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')
 
