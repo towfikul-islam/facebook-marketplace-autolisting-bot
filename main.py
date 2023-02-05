@@ -49,7 +49,7 @@ for acc_idx, account in enumerate(ACCOUNTS):
         logger.error(e)
         continue
     else:
-        logger.success(f"Successfully posted items on account: {account['login']['id']}")
+        logger.success(f"Successfully posted items on account: {account['mail']}")
     finally:
         fb.browser.close()
         fb.playwright.stop()
