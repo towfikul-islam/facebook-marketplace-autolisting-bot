@@ -21,23 +21,14 @@ def publish_listing(data, page, user, account, settings):
 		edited_img_dir = os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')
 
 		if user['duplicate_img']:
-			watermark_text = settings['watermark_text'] if settings['watermark_text'] else account['mail']
-			watermark_font_size = settings['watermark_font_size'] if settings['watermark_font_size'] else 40
-
 			# crop images
 			imgs_cropped = crop_img(data['photos'])
 
-			# # add a watermark in images
-			# imgs_watermarked = add_img_watermark(imgs_cropped, text=watermark_text, font_size=watermark_font_size)
-
-			# # remove the infomation that remains attached to the image
-			# imgs_exif_removed = remove_img_meta(imgs_watermarked) 
-
 			# Create string that contains all of the image paths separeted by \n
-			images_path = generate_multiple_images_path(imgs_cropped, user['multiple_img'], f_out=edited_img_dir)
+			images_path = generate_multiple_images_path(imgs_cropped, f_out=edited_img_dir)
 		else:
 			# Create string that contains all of the image paths separeted by \n
-			images_path = generate_multiple_images_path(data['photos'], user['multiple_img'])
+			images_path = generate_multiple_images_path(data['photos'])
 
 
 		# Add images to the the listing
@@ -79,16 +70,16 @@ def publish_listing(data, page, user, account, settings):
 			page.click('css=div[aria-label="Click to submit current value"]')
 
 	# sku (optional)
-	if data['sku_id']:
+	if 'sku_id' in data and data['sku_id']:
 		page.wait_for_timeout(random.randint(1000, 3000))
 		page.type('css=label[aria-label="SKU"] input', str(data['sku_id']))
 
 	# location (optional)
-	if data['location']:
+	if 'location' in data and data['location']:
 		page.wait_for_timeout(random.randint(1000, 3000))
 		page.fill('label[aria-label="Location"] input', '')
 		page.type('label[aria-label="Location"] input', str(data['location']))
-		page.wait_for_load_state('networkidle')
+		page.wait_for_load_state()
 		page.wait_for_timeout(random.randint(3000, 5000))
 		page.click('ul[role="listbox"] li:first-child > div')
 
@@ -99,25 +90,18 @@ def publish_listing(data, page, user, account, settings):
 	# Go to the next step
 	page.wait_for_timeout(random.randint(1000, 3000))
 	page.click('div[aria-label="Next"]')
-	page.wait_for_load_state('networkidle')
+	page.wait_for_load_state()
 
-	# few category items has 2nd Next button
-	# if selector_exists(page, 'div[aria-label="Next"]'):
-	# 	page.wait_for_timeout(random.randint(1000, 3000))
-	# 	page.click('div[aria-label="Next"]')
-	# 	page.wait_for_load_state('networkidle')
 
 	# Add listing to multiple groups
-	if data['groups']:
-		if user['group_posting']:
-			add_listing_to_multiple_groups(data['groups'], page)
-		else:
-			logger.warning('You are not allowed to use GROUP_POSTING feature. Buy to activate!')
+	if 'groups' in data and data['groups']:
+		add_listing_to_multiple_groups(data['groups'], page)
 
 	# Publish the listing
-	page.wait_for_timeout(random.randint(1000, 3000))
-	page.click('div[aria-label="Publish"]')
-	page.wait_for_load_state('networkidle')
+	if settings['posting_strategy'] != 'tabs':
+		page.wait_for_timeout(random.randint(1000, 3000))
+		page.click('div[aria-label="Publish"]')
+		page.wait_for_load_state()
 
 
 def add_listing_to_multiple_groups(groups_text, page):
@@ -143,11 +127,6 @@ def select_category(selector, data, page):
 	categories = data['category'].split(';')
 
 	for cat in categories:
-		# try:
-		# 	page.click(f'div[role="button"] span:text-is("{cat.strip()}")')
-		# except:
-		# 	page.click(f'div[role="radio"] span:text-is("{cat.strip()}")')
-
 		page.click(f'span:text-is("{cat.strip()}")')
 		page.wait_for_timeout(random.randint(1000, 3000))
 		

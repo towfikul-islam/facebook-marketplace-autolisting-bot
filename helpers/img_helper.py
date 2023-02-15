@@ -116,10 +116,7 @@ def generate_multiple_images_path(images, multiple_feature, f_out=os.path.join(o
     image_names = []
 
     # Split image names into array by this symbol ";" and make a list
-    for idx, image_name in enumerate(images.split(';')):
-        if idx > 0 and not multiple_feature:
-            logger.warning("You are not allowed to use MULTIPLE IMAGES feature. Buy to activate!")
-            continue
+    for image_name in images.split(';'):
         image_names.append(os.path.join(f_out, image_name))
 
     return image_names
