@@ -34,9 +34,11 @@ class Marketplace():
         
         if cookies:
             self.context.add_cookies(json.loads(cookies))
-            self.page.goto("https://www.facebook.com/", wait_until='networkidle')
+            self.page.goto("https://www.facebook.com/")
+            self.page.wait_for_load_state(timeout=120000)
         else:
-            self.page.goto("https://www.facebook.com/", wait_until='networkidle')
+            self.page.goto("https://www.facebook.com/")
+            self.page.wait_for_load_state(timeout=120000)
 
             # Username
             self.page.wait_for_timeout(random.randint(3000, 5000))
@@ -59,7 +61,13 @@ class Marketplace():
             raise Exception(self.page.locator("css=div[id='error_box']").inner_text())
 
         # Ensure login
-        self.page.locator("css=span", has_text="What's on your mind,").wait_for(state="attached", timeout=5000)
+        try:
+            self.page.locator("css=span", has_text="What's on your mind,").wait_for(state="attached", timeout=120000)
+        except:
+            print('Fill up the 2-step verification code and press enter to continue')
+            os.system('pause')
+            self.page.goto("https://www.facebook.com/", wait_until='networkidle')
+            self.page.wait_for_load_state()
 
         # save cookies for next login
         if not os.path.exists(os.path.join(os.getcwd(), 'inputs', 'cookies')):

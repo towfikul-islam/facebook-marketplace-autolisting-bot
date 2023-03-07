@@ -38,32 +38,30 @@ for acc_idx, account in enumerate(ACCOUNTS):
         for idx, item in enumerate(LISTINGS):
             if idx == 0:
                 fb.page.goto('https://www.facebook.com/marketplace/create/item')
-                fb.page.wait_for_load_state()
-                new_page = fb.page
             else:   
-                with fb.page.context.expect_page() as new_page_info:
-                    fb.page.evaluate('''() => {window.open('https://www.facebook.com/marketplace/create/item', '_blank')}''')
-                new_page = new_page_info.value
+                fb.page = fb.context.new_page()
+                fb.page.goto('https://www.facebook.com/marketplace/create/item')
+
+            fb.page.wait_for_load_state()
 
             if not user['paid'] and int(auth.get_values(user['row'], idx_run_limit)) == 0: 
                 logger.error(f"Trial session is over. It's high time to purchase!")
                 break
             
             try:
-                publish_listing(item, new_page, user, account, SETTINGS) 
+                publish_listing(item, fb.page, user, account, SETTINGS) 
                 fb.page.wait_for_timeout(5000)
             except Exception as e:
                 logger.error(e)
-                pass
             
             
         opened_pages = fb.context.pages
-        for p in opened_pages:
-            opened_tab = p.wait_for_timeout(random.randint(1000, 3000))
+        for p in reversed(opened_pages):
             try:
                 p.click('div[aria-label="Publish"]')
-                new_page.wait_for_load_state()
+                p.wait_for_load_state()
                 p.wait_for_timeout(5000)
+                print(f"account: {account['mail']} | successfully posted a item")
 
                 if user['paid']:
                     auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
@@ -72,9 +70,6 @@ for acc_idx, account in enumerate(ACCOUNTS):
                     auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
             except Exception as e:
                 logger.error(e)
-                continue
-            else:
-                logger.success(f"Successfully posted a item on account: {account['mail']}")
             p.close()
         
         # fb.browser.close()
@@ -88,6 +83,7 @@ for acc_idx, account in enumerate(ACCOUNTS):
             # go to listing page
             fb.page.goto('https://www.facebook.com/marketplace/create/item')
             fb.page.wait_for_load_state()
+            print(f"Successfully posted a item on account: {account['mail']}")
 
             try:       
                 publish_listing(item, fb.page, user, account, SETTINGS) 
@@ -99,9 +95,6 @@ for acc_idx, account in enumerate(ACCOUNTS):
                     auth.worksheet.update_cell(user['row'], idx_total_run, int(auth.get_values(user['row'], idx_total_run))+1)
             except Exception as e:
                 logger.error(e)
-                continue
-            else:
-                logger.success(f"Successfully posted a item on account: {account['mail']}")
    
         fb.browser.close()
         fb.playwright.stop()

@@ -2,9 +2,8 @@ import os
 import shutil
 import random
 from loguru import logger
-from helpers.file_helper import read_file
-from helpers.img_helper import add_img_watermark, remove_img_meta, generate_multiple_images_path, crop_img
-from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
+from helpers.img_helper import generate_multiple_images_path, crop_img
+from playwright.sync_api import Page
 
 def upload(images, page):
 	if not images:
@@ -15,7 +14,7 @@ def upload(images, page):
 	page.locator('css=input[accept="image/*,image/heif,image/heic"]').set_input_files(images)
 
 
-def publish_listing(data, page, user, account, settings):
+def publish_listing(data, page: Page, user, account, settings):
 	
 	if data['photos']:
 		edited_img_dir = os.path.join(os.getcwd(), 'inputs', 'photos', 'edited')
@@ -25,10 +24,10 @@ def publish_listing(data, page, user, account, settings):
 			imgs_cropped = crop_img(data['photos'])
 
 			# Create string that contains all of the image paths separeted by \n
-			images_path = generate_multiple_images_path(imgs_cropped, f_out=edited_img_dir)
+			images_path = generate_multiple_images_path(imgs_cropped, user['multiple_img'], f_out=edited_img_dir)
 		else:
 			# Create string that contains all of the image paths separeted by \n
-			images_path = generate_multiple_images_path(data['photos'])
+			images_path = generate_multiple_images_path(data['photos'], user['multiple_img'])
 
 
 		# Add images to the the listing
@@ -99,6 +98,9 @@ def publish_listing(data, page, user, account, settings):
 
 	# Publish the listing
 	if settings['posting_strategy'] != 'tabs':
+		for btn_close in page.query_selector_all('div[aria-label="Close"][role="button"]'):
+			if btn_close: btn_close.click()
+
 		page.wait_for_timeout(random.randint(1000, 3000))
 		page.click('div[aria-label="Publish"]')
 		page.wait_for_load_state()

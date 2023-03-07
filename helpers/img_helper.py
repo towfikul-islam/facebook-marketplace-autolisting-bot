@@ -112,12 +112,12 @@ def remove_img_meta(images, f_in=os.path.join(os.getcwd(), 'inputs', 'photos', '
 
     return images
 
-def generate_multiple_images_path(images, multiple_feature, f_out=os.path.join(os.getcwd(), 'inputs', 'photos')):
+def generate_multiple_images_path(images, f_out=os.path.join(os.getcwd(), 'inputs', 'photos')):
     image_names = []
 
     # Split image names into array by this symbol ";" and make a list
     for image_name in images.split(';'):
-        image_names.append(os.path.join(f_out, image_name))
+        image_names.append(os.path.join(f_out, image_name.strip()))
 
     return image_names
     
